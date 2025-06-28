@@ -37,3 +37,6 @@ else:
         # Read and clean
     df = spark.read.option("header", True).csv(f"s3://{bucket}/{raw_key}")
     df_clean = df.dropna(subset=["product_id"]).dropDuplicates(["product_id"])
+
+        # Write Delta
+    df_clean.write.format("delta").mode("overwrite").save(processed_path)
