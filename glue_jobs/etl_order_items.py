@@ -21,21 +21,21 @@ log_prefix = "lakehouse/processed/_processed_log/order_items/"
 
 s3 = boto3.client("s3")
 
-# Step 1: List all raw .csv files
+# List all raw .csv files
 response = s3.list_objects_v2(Bucket=bucket, Prefix=raw_prefix)
 raw_files = [
     obj["Key"] for obj in response.get("Contents", [])
     if obj["Key"].endswith(".csv")
 ]
 
-# Step 2: List already processed logs
+# List already processed logs
 response = s3.list_objects_v2(Bucket=bucket, Prefix=log_prefix)
 processed_logs = [
     os.path.basename(obj["Key"]).replace(".txt", "")
     for obj in response.get("Contents", [])
 ]
 
-# Step 3: Filter new files
+# Filter new files
 files_to_process = [
     key for key in raw_files
     if os.path.basename(key).replace(".csv", "") not in processed_logs
