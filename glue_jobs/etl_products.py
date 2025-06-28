@@ -40,3 +40,11 @@ else:
 
         # Write Delta
     df_clean.write.format("delta").mode("overwrite").save(processed_path)
+
+        # Register table
+    spark.sql("CREATE DATABASE IF NOT EXISTS ecom_catalog")
+    spark.sql(f"""
+        CREATE TABLE IF NOT EXISTS ecom_catalog.products
+        USING DELTA
+        LOCATION '{processed_path}'
+    """)
