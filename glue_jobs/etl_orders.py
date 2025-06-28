@@ -47,7 +47,7 @@ if not files_to_process:
     print(" No new order files to process.")
 else:
     for key in files_to_process:
-        print(f"🚀 Processing {key}")
+        print(f" Processing {key}")
         s3_path = f"s3://{bucket}/{key}"
         df = spark.read.option("header", True).csv(s3_path)
 
