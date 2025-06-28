@@ -1,0 +1,140 @@
+{
+    "Comment": "ETL pipeline with resumability and branching logic",
+    "StartAt": "Convert Excel to CSV",
+    "States": {
+      "Convert Excel to CSV": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::glue:startJobRun.sync",
+        "Parameters": {
+          "JobName": "convert_excel_to_csv_job"
+        },
+        "Next": "Check Products Processed",
+        "Catch": [
+          {
+            "ErrorEquals": [
+              "States.ALL"
+            ],
+            "Next": "FailState"
+          }
+        ]
+      },
+      "Check Products Processed": {
+        "Type": "Task",
+        "Resource": "arn:aws:lambda:eu-north-1:714377355835:function:check_marker_lambda",
+        "Parameters": {
+          "dataset": "products"
+        },
+        "Next": "Products Already Processed?"
+      },
+      "Products Already Processed?": {
+        "Type": "Choice",
+        "Choices": [
+          {
+            "Variable": "$.already_processed",
+            "BooleanEquals": true,
+            "Next": "Check Orders Processed"
+          }
+        ],
+        "Default": "ETL Products"
+      },
+      "ETL Products": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::glue:startJobRun.sync",
+        "Parameters": {
+          "JobName": "etl_products_job"
+        },
+        "Next": "Check Orders Processed",
+        "Catch": [
+          {
+            "ErrorEquals": [
+              "States.ALL"
+            ],
+            "Next": "FailState"
+          }
+        ]
+      },
+      "Check Orders Processed": {
+        "Type": "Task",
+        "Resource": "arn:aws:lambda:eu-north-1:714377355835:function:check_marker_lambda",
+        "Parameters": {
+          "dataset": "orders"
+        },
+        "Next": "Orders Already Processed?"
+      },
+      "Orders Already Processed?": {
+        "Type": "Choice",
+        "Choices": [
+          {
+            "Variable": "$.already_processed",
+            "BooleanEquals": true,
+            "Next": "Check Order Items Processed"
+          }
+        ],
+        "Default": "ETL Orders"
+      },
+      "ETL Orders": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::glue:startJobRun.sync",
+        "Parameters": {
+          "JobName": "etl_orders_job"
+        },
+        "Next": "Check Order Items Processed",
+        "Catch": [
+          {
+            "ErrorEquals": [
+              "States.ALL"
+            ],
+            "Next": "FailState"
+          }
+        ]
+      },
+      "Check Order Items Processed": {
+        "Type": "Task",
+        "Resource": "arn:aws:lambda:eu-north-1:714377355835:function:check_marker_lambda",
+        "Parameters": {
+          "dataset": "order_items"
+        },
+        "Next": "Order Items Already Processed?"
+      },
+      "Order Items Already Processed?": {
+        "Type": "Choice",
+        "Choices": [
+          {
+            "Variable": "$.already_processed",
+            "BooleanEquals": true,
+            "Next": "Archive Raw Files"
+          }
+        ],
+        "Default": "ETL Order Items"
+      },
+      "ETL Order Items": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::glue:startJobRun.sync",
+        "Parameters": {
+          "JobName": "etl_order_items_job"
+        },
+        "Next": "Archive Raw Files",
+        "Catch": [
+          {
+            "ErrorEquals": [
+              "States.ALL"
+            ],
+            "Next": "FailState"
+          }
+        ]
+      },
+      "Archive Raw Files": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::glue:startJobRun.sync",
+        "Parameters": {
+          "JobName": "archive_raw_files_job"
+        },
+        "End": true
+      },
+      "FailState": {
+        "Type": "Fail",
+        "Error": "ETLJobFailed",
+        "Cause": "One of the ETL Glue Jobs Failed"
+      }
+    }
+  }
