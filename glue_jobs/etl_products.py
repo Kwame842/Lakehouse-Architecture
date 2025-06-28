@@ -32,3 +32,8 @@ if already_processed():
     print("Products.csv already processed. Skipping ETL.")
 else:
     print("Starting ETL for products.csv")
+
+
+        # Read and clean
+    df = spark.read.option("header", True).csv(f"s3://{bucket}/{raw_key}")
+    df_clean = df.dropna(subset=["product_id"]).dropDuplicates(["product_id"])
