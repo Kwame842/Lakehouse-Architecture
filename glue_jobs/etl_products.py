@@ -19,3 +19,16 @@ log_key = "lakehouse/processed/_processed_log/products/products.txt"
 
 # S3 Clients
 s3 = boto3.client("s3")
+
+# Check if already processed
+def already_processed():
+    try:
+        s3.head_object(Bucket=bucket, Key=log_key)
+        return True
+    except s3.exceptions.ClientError:
+        return False
+
+if already_processed():
+    print("Products.csv already processed. Skipping ETL.")
+else:
+    print("Starting ETL for products.csv")
