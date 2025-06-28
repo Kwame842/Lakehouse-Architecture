@@ -48,3 +48,7 @@ else:
         USING DELTA
         LOCATION '{processed_path}'
     """)
+
+        # Mark as processed
+    s3.put_object(Bucket=bucket, Key=log_key, Body="processed")
+    print("ETL complete. Marker written to S3.")
