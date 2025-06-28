@@ -22,3 +22,10 @@ log_prefix = "lakehouse/processed/_processed_log/orders/"
 
 # Initialize Boto3 S3 client
 s3 = boto3.client("s3")
+
+# Get all raw .csv files
+response = s3.list_objects_v2(Bucket=bucket, Prefix=raw_prefix)
+raw_files = [
+    obj["Key"] for obj in response.get("Contents", [])
+    if obj["Key"].endswith(".csv")
+]
