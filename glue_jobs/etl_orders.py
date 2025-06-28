@@ -18,3 +18,7 @@ bucket = "ecom-lakehouse"
 raw_prefix = "lakehouse/raw/orders/"
 processed_path = f"s3://{bucket}/lakehouse/processed/orders/"
 log_prefix = "lakehouse/processed/_processed_log/orders/"
+
+
+# Initialize Boto3 S3 client
+s3 = boto3.client("s3")
