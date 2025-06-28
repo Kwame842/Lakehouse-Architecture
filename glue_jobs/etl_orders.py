@@ -29,3 +29,10 @@ raw_files = [
     obj["Key"] for obj in response.get("Contents", [])
     if obj["Key"].endswith(".csv")
 ]
+
+# Get all marker logs (already processed)
+response = s3.list_objects_v2(Bucket=bucket, Prefix=log_prefix)
+processed_logs = [
+    os.path.basename(obj["Key"]).replace(".txt", "")
+    for obj in response.get("Contents", [])
+]
