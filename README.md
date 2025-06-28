@@ -129,15 +129,15 @@ lakehouse-pipeline/
 Use the Glue Data Catalog database: `ecom_catalog`
 
 ```sql
--- Count orders per department
-SELECT p.department, COUNT(*) AS total_orders
-FROM ecom_catalog.order_items oi
-JOIN ecom_catalog.products p ON oi.product_id = p.product_id
-GROUP BY p.department
-ORDER BY total_orders DESC;
+-- Preview the first 10 rows for the Orders table
+SELECT * 
+FROM "ecom_catalog"."orders" 
+limit 10;
 ```
 
 More queries: `sql/`
+
+![Athena Query](imgs/Athena.png)
 
 ---
 
@@ -188,6 +188,8 @@ aws s3 cp glue_jobs/ s3://ecom-lakehouse/scripts/ --recursive
 ```bash
 aws stepfunctions update-state-machine   --state-machine-arn arn:aws:states:<region>:<acct>:stateMachine:lakehouse-orchestration   --definition file://step_functions/lakehouse_etl_flow.json
 ```
+
+![Step Functions](imgs/StepFunction.png)
 
 ---
 
