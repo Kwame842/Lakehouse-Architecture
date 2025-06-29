@@ -25,5 +25,5 @@ jobs:
       - name: Deploy Step Function
         run: |
           aws stepfunctions update-state-machine \
-            --state-machine-arn arn:aws:states:eu-north-1:714377355835:stateMachine:lakehouse-orchestration \
+            --state-machine-arn arn:aws:states:eu-north-1:714377355835:stateMachine:Lakehouse_Orchestration \
             --definition file://step_functions/lakehouse_etl_flow.json
