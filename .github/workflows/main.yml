@@ -1,0 +1,29 @@
+name: Deploy Lakehouse Pipeline
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-north-1
+
+      - name: Upload Glue Jobs to S3
+        run: aws s3 cp glue_jobs/ s3://ecom-lakehouse/scripts/ --recursive
+
+      - name: Deploy Step Function
+        run: |
+          aws stepfunctions update-state-machine \
+            --state-machine-arn arn:aws:states:eu-north-1:714377355835:stateMachine:lakehouse-orchestration \
+            --definition file://step_functions/lakehouse_etl_flow.json
