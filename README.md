@@ -40,6 +40,8 @@ It covers the full end-to-end workflow, including data ingestion from Excel and 
                                           └────────────────────────────┘
 ```
 
+![Architecture Diagram](diagram/Diagram-Ecommerce.png)
+
 ---
 
 ## Features
