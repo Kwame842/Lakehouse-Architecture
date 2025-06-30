@@ -6,11 +6,12 @@ from datetime import datetime
 csv_data = """
 order_id,customer_id,total_amount,order_date
 1,1001,49.99,2025-06-01
-2,1002,89.99,2025/06/02
-2,1002,89.99,2025/06/02
+2,1002,89.99,2025-06-02
+2,1002,89.99,2025-06-02
 3,,99.00,2025-06-03
 4,1003,15.00,
 """
+
 
 def clean_orders(df):
     # Simulate what your Glue script does
