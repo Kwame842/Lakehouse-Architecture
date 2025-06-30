@@ -76,11 +76,9 @@ lakehouse-pipeline/
 │   ├── top_customers.sql
 │   └── rejected_records_analysis.sql
 │
-├── scripts/                   # Optional data CLI/utilities (optional)
-│
 ├── .github/
 │   └── workflows/
-│       └── deploy.yml         # CI/CD Pipeline
+│       └── main.yml         # CI/CD Pipeline
 │
 ├── README.md
 └── requirements.txt
