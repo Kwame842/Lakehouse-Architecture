@@ -193,6 +193,16 @@ aws stepfunctions update-state-machine   --state-machine-arn arn:aws:states:<reg
 ![Step Functions](imgs/StepFunction.png)
 
 ---
+## Testing Strategy
+
+- ✅ `tests/test_etl_orders.py`: simulates order ETL with Pandas
+- ✅ Use `pytest` to run all:
+
+```bash
+pytest tests/
+```
+
+---
 
 ## Assumptions
 
