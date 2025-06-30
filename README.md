@@ -8,6 +8,9 @@ It covers the full end-to-end workflow, including data ingestion from Excel and 
 
 ## Architecture Overview
 
+![Architecture Diagram](diagram/lab5.png)
+
+
 ```
                 ┌────────────────────────────────┐
                 │      GitHub Actions (CI/CD)    │
@@ -26,7 +29,7 @@ It covers the full end-to-end workflow, including data ingestion from Excel and 
                 └────────────────────────────────┘
                             ▼
 ┌──────────────┐    ┌─────────────────────┐      ┌────────────────────┐
-│   Raw S3     │──▶ │ AWS Lambda (Excel→CSV)│ ──▶│ Glue Jobs (Spark)  │
+│   Raw S3     │──▶ │ AWS Glue (Excel→CSV)│ ──▶│ Glue Jobs (Spark)  │
 │ uploads/     │    └─────────────────────┘      └────────────────────┘
                             │                              │
                             ▼                              ▼
@@ -39,8 +42,6 @@ It covers the full end-to-end workflow, including data ingestion from Excel and 
                                           │ Glue Data Catalog + Athena │
                                           └────────────────────────────┘
 ```
-
-![Architecture Diagram](diagram/Diagram-Ecommerce.png)
 
 ---
 
@@ -94,7 +95,7 @@ lakehouse-pipeline/
 
 ### Steps
 
-1. **Lambda**: Converts `.xlsx` → `.csv` per sheet
+1. **Glue or Lambda**: Converts `.xlsx` → `.csv` per sheet
 2. **Marker Check**: `check_marker_lambda` avoids reprocessing files
 3. **Glue Jobs**:
    - `etl_products`: Deduplicates and stores product info
@@ -143,7 +144,7 @@ More queries: `sql/`
 
 ## CI/CD (GitHub Actions)
 
-### `.github/workflows/deploy.yml` handles:
+### `.github/workflows/main.yml` handles:
 
 - ✅ Dependency installs
 - ✅ Pytest validation (optional)
