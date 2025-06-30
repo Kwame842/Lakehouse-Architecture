@@ -69,6 +69,7 @@ lakehouse-pipeline/
 │   ├── archive_raw_csvs.py
 │   └── convert_excel_to_csv.py
 │
+├── .venv/        # Virtual environment to run unit tests
 ├── step_functions/
 │   └── lakehouse_etl_flow.json     # Resumable Step Function definition
 │
@@ -77,6 +78,8 @@ lakehouse-pipeline/
 │   ├── top_customers.sql
 │   └── rejected_records_analysis.sql
 │
+├── tests/                     # to run unit tests
+│   └── test_etl_products.py     # Testing script
 ├── .github/
 │   └── workflows/
 │       └── main.yml         # CI/CD Pipeline
